@@ -10,9 +10,10 @@ from typing import Optional
 
 log = logging.getLogger(__name__)
 
-CLAUDE_URL = "http://127.0.0.1:3099/chat"
+import os
+CLAUDE_URL = os.environ.get("CLAUDE_URL", "http://127.0.0.1:3099/chat")
 
-SYSTEM_PROMPT = """Sen ZakatBot — professional shaxsiy moliyaviy maslahatchi va Finance Managersen.
+SYSTEM_PROMPT = """Sen FinanceAgentBot — professional shaxsiy moliyaviy maslahatchi va Finance Managersen.
 
 VAZIFANG:
 - Foydalanuvchi xarajat yoki daromad haqida yozganda miqdor va kategoriyani aniqla
@@ -54,10 +55,10 @@ class ConversationManager:
         history = self.get_history(user_id)
         parts = [SYSTEM_PROMPT, ""]
         for turn in history:
-            role = "Foydalanuvchi" if turn["role"] == "user" else "ZakatBot"
+            role = "Foydalanuvchi" if turn["role"] == "user" else "FinanceAgentBot"
             parts.append(f"{role}: {turn['content']}")
         parts.append(f"Foydalanuvchi: {new_message}")
-        parts.append("ZakatBot:")
+        parts.append("FinanceAgentBot:")
         return "\n".join(parts)
 
 

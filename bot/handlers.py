@@ -32,7 +32,7 @@ async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         set_state(user.id, State.WAITING_INCOME_SETUP)
         await update.message.reply_text(
             f"👋 Salom, {user.first_name}!\n\n"
-            "Men *ZakatBot* — oilaviy moliyaviy yordamchiman 💼\n\n"
+            "Men *FinanceAgentBot* — oilaviy moliyaviy yordamchiman 💼\n\n"
             "Xarajat va daromadlaringizni yozib boring, men tahlil qilib boraman.\n\n"
             "📊 Boshlash uchun: *Oylik daromadingiz qancha?* (so'mda yozing)\n"
             "_Masalan: 5000000_",

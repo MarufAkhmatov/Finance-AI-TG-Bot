@@ -10,7 +10,7 @@ from db.database import (
     get_categories, get_family_members, get_member_stats
 )
 
-app = FastAPI(title="ZakatBot Finance Dashboard")
+app = FastAPI(title="FinanceAgentBot Dashboard")
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 

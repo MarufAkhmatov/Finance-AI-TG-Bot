@@ -1,5 +1,5 @@
 """
-ZakatBot — Finance Manager
+FinanceAgentBot — Finance Manager
 Bot + Dashboard + Cloudflare Tunnel (no warning page)
 """
 import asyncio

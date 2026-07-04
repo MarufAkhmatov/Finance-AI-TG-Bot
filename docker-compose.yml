@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  zakatbot:
+  financeagentbot:
     build: .
-    container_name: zakatbot
+    container_name: financeagentbot
     restart: unless-stopped
     volumes:
       - ./finance.db:/app/finance.db
@@ -12,3 +12,6 @@ services:
       - "8900:8900"
     environment:
       - CF_BIN=cloudflared
+      - CLAUDE_URL=http://host.docker.internal:3099/chat
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
