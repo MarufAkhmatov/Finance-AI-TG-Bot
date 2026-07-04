@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  zakatbot:
+    build: .
+    container_name: zakatbot
+    restart: unless-stopped
+    volumes:
+      - ./finance.db:/app/finance.db
+      - ./.env:/app/.env:ro
+    ports:
+      - "8900:8900"
+    environment:
+      - CF_BIN=cloudflared
