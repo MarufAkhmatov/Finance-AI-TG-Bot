@@ -1,0 +1,9 @@
+*.db
+*.log
+*.log.err
+__pycache__/
+*.pyc
+.env
+faster_whisper_models/
+.venv/
+venv/

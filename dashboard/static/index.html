@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZakatBot — Finance Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">💼 ZakatBot</div>
+    <nav>
+      <a href="#" class="nav-item active" data-tab="overview">📊 Umumiy</a>
+      <a href="#" class="nav-item" data-tab="transactions">📋 Tranzaksiyalar</a>
+      <a href="#" class="nav-item" data-tab="calendar">📅 Kalendar</a>
+      <a href="#" class="nav-item" data-tab="analytics">📈 Tahlil</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="user-info">Yuklanmoqda...</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <div class="month-nav">
+        <button id="prev-month">‹</button>
+        <span id="month-label">Iyul 2026</span>
+        <button id="next-month">›</button>
+      </div>
+      <div class="header-right">
+        <span id="uid-display"></span>
+      </div>
+    </header>
+
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="cards">
+        <div class="card income">
+          <div class="card-icon">💰</div>
+          <div class="card-body">
+            <div class="card-label">Daromad</div>
+            <div class="card-value" id="c-income">—</div>
+          </div>
+        </div>
+        <div class="card expense">
+          <div class="card-icon">💸</div>
+          <div class="card-body">
+            <div class="card-label">Xarajat</div>
+            <div class="card-value" id="c-expense">—</div>
+          </div>
+        </div>
+        <div class="card balance">
+          <div class="card-icon">📊</div>
+          <div class="card-body">
+            <div class="card-label">Balans</div>
+            <div class="card-value" id="c-balance">—</div>
+          </div>
+        </div>
+        <div class="card budget">
+          <div class="card-icon">🎯</div>
+          <div class="card-body">
+            <div class="card-label">Byudjet</div>
+            <div class="card-value" id="c-budget">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-box">
+          <h3>Kategoriyalar bo'yicha xarajatlar</h3>
+          <canvas id="pie-chart"></canvas>
+        </div>
+        <div class="chart-box wide">
+          <h3>6 oylik trend</h3>
+          <canvas id="trend-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="recent-box">
+        <h3>Oxirgi tranzaksiyalar</h3>
+        <div id="recent-list"></div>
+      </div>
+    </div>
+
+    <!-- Transactions Tab -->
+    <div id="tab-transactions" class="tab-content">
+      <div class="filter-bar">
+        <input type="text" id="tx-search" placeholder="Qidirish...">
+        <select id="tx-type">
+          <option value="">Barchasi</option>
+          <option value="expense">Xarajat</option>
+          <option value="income">Daromad</option>
+        </select>
+      </div>
+      <table class="tx-table">
+        <thead>
+          <tr><th>Sana</th><th>Kategoriya</th><th>Tavsif</th><th>Miqdor</th><th>Manba</th></tr>
+        </thead>
+        <tbody id="tx-body"></tbody>
+      </table>
+      <div id="tx-empty" class="empty-state" style="display:none">Tranzaksiyalar yo'q</div>
+    </div>
+
+    <!-- Calendar Tab -->
+    <div id="tab-calendar" class="tab-content">
+      <div id="calendar-grid"></div>
+      <div class="cal-legend">
+        <span class="cal-dot expense"></span> Xarajat
+        <span class="cal-dot income" style="margin-left:16px"></span> Daromad
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="tab-analytics" class="tab-content">
+      <div class="charts-row">
+        <div class="chart-box">
+          <h3>Xarajat ulushi (%)</h3>
+          <canvas id="doughnut-chart"></canvas>
+        </div>
+        <div class="chart-box wide">
+          <h3>Oylik xarajat vs daromad</h3>
+          <canvas id="bar-chart"></canvas>
+        </div>
+      </div>
+      <div class="cat-breakdown" id="cat-breakdown"></div>
+    </div>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
