@@ -320,6 +320,38 @@ body {
 .budget-ring .ring-bg { fill: none; stroke: var(--glass2); }
 .budget-ring .ring-fill { fill: none; stroke: var(--yellow); stroke-linecap: round; transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
 
+/* ── Family tab ── */
+.family-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 4px;
+}
+.member-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color .2s;
+}
+.member-card:hover { border-color: var(--accent); }
+.member-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: #000;
+  flex-shrink: 0;
+}
+.member-info { min-width: 0; }
+.member-name { font-size: 14px; font-weight: 700; }
+.member-exp  { font-size: 12px; color: var(--red);   margin-top: 3px; }
+.member-inc  { font-size: 12px; color: var(--green); }
+.member-you  { font-size: 11px; color: var(--accent); margin-top: 2px; }
+
 /* mobile */
 @media (max-width: 820px) {
   .sidebar { display: none; }

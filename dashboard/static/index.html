@@ -27,6 +27,9 @@
       <a href="#" class="nav-item" data-tab="analytics">
         <span>📈</span> Tahlil
       </a>
+      <a href="#" class="nav-item" data-tab="family" id="family-nav" style="display:none">
+        <span>👨‍👩‍👧</span> Oila
+      </a>
     </nav>
     <div class="sidebar-footer">
       <strong id="user-name">—</strong>
@@ -142,6 +145,22 @@
         </div>
       </div>
       <div class="cat-breakdown" id="cat-breakdown"></div>
+    </div>
+
+    <!-- FAMILY -->
+    <div id="tab-family" class="tab-content">
+      <div class="family-header" id="family-header"></div>
+      <div class="charts-row" style="margin-top:18px">
+        <div class="chart-box">
+          <h3>Kim ko'proq sarf qildi?</h3>
+          <canvas id="member-bar-chart"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>Ulush taqsimoti</h3>
+          <canvas id="member-pie-chart"></canvas>
+        </div>
+      </div>
+      <div class="cat-breakdown" id="member-breakdown"></div>
     </div>
   </main>
 </div>

@@ -60,9 +60,10 @@ function switchTab(tab) {
   S.tab = tab;
   document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
   document.querySelectorAll('.tab-content').forEach(el => el.classList.toggle('active', el.id === `tab-${tab}`));
-  if (tab === 'calendar')  loadCalendar();
-  if (tab === 'analytics') loadAnalytics();
+  if (tab === 'calendar')     loadCalendar();
+  if (tab === 'analytics')    loadAnalytics();
   if (tab === 'transactions') renderTx();
+  if (tab === 'family')       loadFamily();
 }
 
 // ─── API ──────────────────────────────────────────────────────────
@@ -81,9 +82,16 @@ async function loadAll() {
 async function loadUser() {
   const u = await get('/api/user');
   if (u.error) return;
+  S.user = u;
   document.getElementById('user-name').textContent = u.name || 'Foydalanuvchi';
   document.getElementById('user-budget').textContent =
     u.monthly_income ? `Byudjet: ${fmt(u.monthly_income)} so'm` : 'Byudjet yo\'q';
+
+  // Show family tab only if user is in a family
+  const familyNav = document.getElementById('family-nav');
+  if (u.is_family && u.family_members?.length > 1) {
+    familyNav.style.display = 'flex';
+  }
 }
 
 async function loadSummary() {
@@ -312,6 +320,100 @@ async function loadAnalytics() {
         </div>
         <div class="cat-pct">${pct}%</div>
         <div class="cat-val">-${fmt(c.total)}</div>
+      </div>`;
+  });
+}
+
+// ─── Family ───────────────────────────────────────────────────────
+async function loadFamily() {
+  const members = await get('/api/members', `&year=${S.year}&month=${S.month}`);
+  if (!members.length) {
+    document.getElementById('family-header').innerHTML =
+      '<div class="empty-state">Oila a\'zolari yo\'q. Botda /invite yuboring.</div>';
+    return;
+  }
+
+  const myName = S.user?.name || '';
+
+  // Member cards
+  document.getElementById('family-header').innerHTML = members.map((m, i) => {
+    const letter = (m.first_name || '?')[0].toUpperCase();
+    const isMe   = m.first_name === myName;
+    return `
+      <div class="member-card">
+        <div class="member-avatar">${letter}</div>
+        <div class="member-info">
+          <div class="member-name">${m.first_name || '?'}</div>
+          <div class="member-exp">💸 ${fmt(m.expense)} so'm</div>
+          <div class="member-inc">💰 ${fmt(m.income)} so'm</div>
+          ${isMe ? '<div class="member-you">● Siz</div>' : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  // Bar chart — per member expense
+  const ctx1 = document.getElementById('member-bar-chart').getContext('2d');
+  if (S.charts.memberBar) S.charts.memberBar.destroy();
+  S.charts.memberBar = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: members.map(m => m.first_name || '?'),
+      datasets: [
+        { label: 'Xarajat', data: members.map(m => m.expense),
+          backgroundColor: members.map((_, i) => CHART_COLORS[i] || '#64748B'),
+          borderRadius: 8, borderSkipped: false },
+        { label: 'Daromad', data: members.map(m => m.income),
+          backgroundColor: 'rgba(0,229,160,0.25)',
+          borderRadius: 8, borderSkipped: false }
+      ]
+    },
+    options: {
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#475569' } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', callback: v => fmt(v) } }
+      },
+      plugins: { legend: { labels: { color: '#64748B', boxWidth: 10 } } }
+    }
+  });
+
+  // Pie chart — share of expense
+  const ctx2 = document.getElementById('member-pie-chart').getContext('2d');
+  if (S.charts.memberPie) S.charts.memberPie.destroy();
+  S.charts.memberPie = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: members.map(m => m.first_name || '?'),
+      datasets: [{
+        data: members.map(m => m.expense),
+        backgroundColor: CHART_COLORS,
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#64748B', boxWidth: 10, font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => ` ${fmt(c.parsed)} so'm` } }
+      }
+    }
+  });
+
+  // Breakdown list
+  const totalExp = members.reduce((s, m) => s + m.expense, 0);
+  const bd = document.getElementById('member-breakdown');
+  bd.innerHTML = '<h3>A\'zo bo\'yicha xarajat taqsimoti</h3>';
+  members.forEach((m, i) => {
+    const pct = totalExp > 0 ? Math.round(m.expense / totalExp * 100) : 0;
+    bd.innerHTML += `
+      <div class="cat-item">
+        <div class="cat-label" style="width:160px">${CHART_COLORS[i] ? `<span style="color:${CHART_COLORS[i]}">●</span>` : ''} ${m.first_name || '?'}</div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-bg">
+            <div class="cat-bar" style="width:${pct}%;background:${CHART_COLORS[i]||'#64748B'}"></div>
+          </div>
+        </div>
+        <div class="cat-pct">${pct}%</div>
+        <div class="cat-val">-${fmt(m.expense)}</div>
       </div>`;
   });
 }

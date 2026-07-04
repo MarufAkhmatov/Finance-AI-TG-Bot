@@ -3,6 +3,7 @@ import logging
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from bot.handlers import (
     cmd_start, cmd_report, cmd_dash, cmd_cats, cmd_reset,
+    cmd_invite, cmd_join, cmd_members,
     handle_text, handle_voice, handle_photo
 )
 
@@ -25,11 +26,14 @@ def build_app():
         .build()
     )
 
-    app.add_handler(CommandHandler("start",  cmd_start))
-    app.add_handler(CommandHandler("report", cmd_report))
-    app.add_handler(CommandHandler("dash",   cmd_dash))
-    app.add_handler(CommandHandler("cats",   cmd_cats))
-    app.add_handler(CommandHandler("reset",  cmd_reset))
+    app.add_handler(CommandHandler("start",   cmd_start))
+    app.add_handler(CommandHandler("report",  cmd_report))
+    app.add_handler(CommandHandler("dash",    cmd_dash))
+    app.add_handler(CommandHandler("cats",    cmd_cats))
+    app.add_handler(CommandHandler("reset",   cmd_reset))
+    app.add_handler(CommandHandler("invite",  cmd_invite))
+    app.add_handler(CommandHandler("join",    cmd_join))
+    app.add_handler(CommandHandler("members", cmd_members))
 
     app.add_handler(MessageHandler(filters.VOICE,        handle_voice))
     app.add_handler(MessageHandler(filters.PHOTO,        handle_photo))
